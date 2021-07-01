@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChatTable extends Migration
+class CreateSwipedTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateChatTable extends Migration
      */
     public function up()
     {
-        Schema::create('chat', function (Blueprint $table) {
+        Schema::create('swiped', function (Blueprint $table) {
             $table->id();
-            $table->integer('chat_id');
-            $table->integer('user_1');
-            $table->integer('user_2');
+            $table->integer('filmid');
+            $table->integer('liked');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +29,9 @@ class CreateChatTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chat');
+        Schema::table('swiped', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
+        Schema::dropIfExists('swiped');
     }
 }

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-$cacheTime = 60;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
@@ -30,7 +29,7 @@ Route::get('/tv/popular', function(Request $req) {
 	curl_setopt($ch, CURLOPT_URL, 'https://api.themoviedb.org/3/tv/popular?api_key=c20660fd566699db614d2e86a63d4e81');
 	$data = curl_exec($ch);
 
-	\Cache::put('tv/popular', $data, now()->addMinutes($cacheTime));
+	\Cache::put('tv/popular', $data, now()->addMinutes(60));
 	return $data;
 });
 
@@ -45,7 +44,7 @@ Route::get('/movie/popular', function(Request $req) {
 	curl_setopt($ch, CURLOPT_URL, 'https://api.themoviedb.org/3/movie/popular?api_key=c20660fd566699db614d2e86a63d4e81');
 	$data = curl_exec($ch);
 
-	\Cache::put('movie/popular', $data, now()->addMinutes($cacheTime));
+	\Cache::put('movie/popular', $data, now()->addMinutes(60));
 	return $data;
 });
 
@@ -60,7 +59,7 @@ Route::get('/tv/popular/{page}', function(Request $req, $page) {
 	curl_setopt($ch, CURLOPT_URL, 'https://api.themoviedb.org/3/tv/popular?api_key=c20660fd566699db614d2e86a63d4e81&page=' . $page);
 	$data = curl_exec($ch);
 
-	\Cache::put('tv/popular' . $page, $data, now()->addMinutes($cacheTime));
+	\Cache::put('tv/popular' . $page, $data, now()->addMinutes(60));
 	return $data;
 });
 
@@ -75,6 +74,6 @@ Route::get('/movie/popular/{page}', function(Request $req, $page) {
 	curl_setopt($ch, CURLOPT_URL, 'https://api.themoviedb.org/3/movie/popular?api_key=c20660fd566699db614d2e86a63d4e81&page=' . $page);
 	$data = curl_exec($ch);
 
-	\Cache::put('movie/popular' . $page, $data, now()->addMinutes($cacheTime));
+	\Cache::put('movie/popular' . $page, $data, now()->addMinutes(60));
 	return $data;
 });
