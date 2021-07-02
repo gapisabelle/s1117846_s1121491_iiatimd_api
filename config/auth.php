@@ -31,11 +31,6 @@ return [
         ],
     ],
 
-    'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -52,19 +47,6 @@ return [
     | Supported: "session", "token"
     |
     */
-
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
-        ],
-    ],
 
     /*
     |--------------------------------------------------------------------------

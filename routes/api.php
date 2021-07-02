@@ -31,3 +31,7 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);    
 });
+
+Route::middleware('jwt.verify')->get('/test', function(Request $request) {
+	return $request->user();
+});
