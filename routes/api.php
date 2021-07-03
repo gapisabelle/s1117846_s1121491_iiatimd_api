@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SwipeController;
+use App\Http\Controllers\MatchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,4 +102,5 @@ Route::middleware('jwt.verify')->get('/test', function(Request $request) {
 Route::group(['jwt.verify'], function ($router) {
 	Route::post('/swipe/store', [SwipeController::class, 'store']);
 	Route::get('/swipe', [SwipeController::class, 'index']);
+	Route::get('/matches', [MatchController::class, 'index']);
 });
