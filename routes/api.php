@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SwipeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,4 +94,11 @@ Route::group([
 
 Route::middleware('jwt.verify')->get('/test', function(Request $request) {
 	return $request->user();
+});
+
+// ALL NEED JWT.VERIFY
+
+Route::group(['jwt.verify'], function ($router) {
+	Route::post('/swipe/store', [SwipeController::class, 'store']);
+	Route::get('/swipe', [SwipeController::class, 'index']);
 });
