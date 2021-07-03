@@ -9,8 +9,6 @@ class MatchController extends Controller
 {
     public function index(Request $request)
     {
-        return response()->json(Matches::where(function ($a) use ($request) {
-        	$a->where('user1', $request->user()->id)->whereOr('user2', $request->user()->id);
-        })->get()->all());
+        return response()->json(Matches::whereOr('user1', 2)->whereOr('user2', 2)->get()->all());
     }
 }
