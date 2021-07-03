@@ -46,20 +46,22 @@ class SwipeController extends Controller {
         		->get();
 
         if (!$otherUserSwipe->isEmpty()) $otherUserSwipe = $otherUserSwipe->random();
+        else {
+	       	$result = Matches::where('film_id', $otherUserSwipe->filmid)->where(function($a) {
+	       		$a->where('user1', $otherUserSwipe->user_id)->orWhere('user2', $otherUserSwipe->user_id);
+	       	})->get()->first();
+	       	if ($result == null) {
+	       		$match = new Matches();
+	       		$match->filmid = $otherUserSwipe->filmid;
+	       		$match->user1 = $request->user()->id;
+	       		$match->user2 = $otherUserSwipe->user_id;
+	       		$match->chat_id = min([$request->user()->id, $otherUserSwipe->user_id]) . "|" . max([$request->user()->id, $otherUserSwipe->user_id]);
+	       		$match->save();
+	       		// TODO: Send notification to both users.
+	       	}
+        }
 
-       	$result = Matches::where('filmid', $otherUserSwipe->filmid)->where(function($a) {
-       		$a->where('user1', $otherUserSwipe->user_id)->orWhere('user2', $otherUserSwipe->user_id);
-       	})->get()->first();
 
-       	if ($result == null) {
-       		$match = new Matches();
-       		$match->filmid = $otherUserSwipe->filmid;
-       		$match->user1 = $request->user()->id;
-       		$match->user2 = $otherUserSwipe->user_id;
-       		$match->chat_id = min([$request->user()->id, $otherUserSwipe->user_id]) . "|" . max([$request->user()->id, $otherUserSwipe->user_id]);
-       		$match->save();
-       		// TODO: Send notification to both users.
-       	}
 
         $swiped = new Swipe();
         $swiped->filmid = $validated["filmId"];
