@@ -41,7 +41,7 @@ class SwipeController extends Controller {
         $validated = $validator->validated();
 
         $otherUserSwipe = Swipe::where('id', '!=', $request->user()->id)
-        		->where('filmid', $validated["filmid"])
+        		->where('filmid', $validated["filmId"])
         		->where('liked', 1)
         		->get()->random();
 
