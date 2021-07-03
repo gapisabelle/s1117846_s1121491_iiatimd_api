@@ -48,7 +48,7 @@ class SwipeController extends Controller {
         if (!$otherUserSwipe->isEmpty()) {
         	$otherUserSwipe = $otherUserSwipe->random();
 
-        	$result = Matches::where('film_id', $otherUserSwipe->filmid)->where(function($a) {
+        	$result = Matches::where('film_id', $otherUserSwipe->filmid)->where(function($a) use ($otherUserSwipe) {
 	       		$a->where('user1', $otherUserSwipe->user_id)->orWhere('user2', $otherUserSwipe->user_id);
 	       	})->get()->first();
 	       	if ($result == null) {
