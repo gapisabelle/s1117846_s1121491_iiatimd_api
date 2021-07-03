@@ -43,7 +43,9 @@ class SwipeController extends Controller {
         $otherUserSwipe = Swipe::where('id', '!=', $request->user()->id)
         		->where('filmid', $validated["filmId"])
         		->where('liked', 1)
-        		->get()->random();
+        		->get();
+
+        if ($otherUserSwipe != null) $otherUserSwipe = $otherUserSwipe->random();
 
        	$result = Matches::where('filmid', $otherUserSwipe->filmid)->where(function($a) {
        		$a->where('user1', $otherUserSwipe->user_id)->orWhere('user2', $otherUserSwipe->user_id);
