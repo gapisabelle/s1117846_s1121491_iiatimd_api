@@ -41,7 +41,7 @@ class SwipeController extends Controller {
         $validated = $validator->validated();
 
         if ($validated['liked'] == 1) {
-	        $otherUserSwipe = Swipe::where('id', '!=', $request->user()->id)
+	        $otherUserSwipe = Swipe::where('user_id', '!=', $request->user()->id)
 	        		->where('filmid', $validated["filmId"])
 	        		->where('liked', 1)
 	        		->get();
