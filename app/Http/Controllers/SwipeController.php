@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Swipe;
+use App\Models\Matches;
 
 class SwipeController extends Controller {
     /**
@@ -31,7 +32,32 @@ class SwipeController extends Controller {
             return response()->json($validator->errors(), 422);
         }
 
+        // if (\Cache::get('lastSwipe')) {
+        // 	\Cache::put('lastSwipe', now(), now()->addMinutes(1));
+
+        // 	// TODO: Search for other users and get a random one
+        // }
+
         $validated = $validator->validated();
+
+        $otherUserSwipe = Swipe::where('id', '!=', $request->user()->id)
+        		->where('filmid', $validated["filmid"])
+        		->where('liked', 1)
+        		->get()->random();
+
+       	$result = Matches::where('filmid', $otherUserSwipe->filmid)->where(function($a) {
+       		$a->where('user1', $otherUserSwipe->user_id)->orWhere('user2', $otherUserSwipe->user_id);
+       	})->get()->first();
+
+       	if ($result == null) {
+       		$match = new Matches();
+       		$match->filmid = $otherUserSwipe->filmid;
+       		$match->user1 = $request->user()->id;
+       		$match->user2 = $otherUserSwipe->user_id;
+       		$match->chat_id = min([$request->user()->id, $otherUserSwipe->user_id]) . "|" . max([$request->user()->id, $otherUserSwipe->user_id]);
+       		$match->save();
+       		// TODO: Send notification to both users.
+       	}
 
         $swiped = new Swipe();
         $swiped->filmid = $validated["filmId"];
@@ -39,17 +65,6 @@ class SwipeController extends Controller {
         $swiped->user_id = $request->user()->id;
 
         return response()->json(["result" => $swiped->save()]);
-    }
-
-    /**
-        * Update the specified resource in storage.
-        *
-        * @param  int  $id
-        * @return Response
-        */
-    public function update($id)
-    {
-        //
     }
 
     /**
