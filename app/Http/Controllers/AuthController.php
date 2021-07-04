@@ -28,15 +28,22 @@ class AuthController extends Controller
     	$validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string|min:6',
+            'fcmtoken' => 'required|string|min:1'
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        if (! $token = auth()->attempt($validator->validated())) {
+        $validated = $validator->validated();
+
+        if (! $token = auth()->attempt(['email' => $validated["email"], 'password' => $validated["password"]])) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+
+        $user = User::where('id', \Auth::user()->id)->firstOrFail();
+        $user->fcmtoken = $validated["fcmtoken"];
+        $user->save();
 
         return $this->createNewToken($token);
     }
