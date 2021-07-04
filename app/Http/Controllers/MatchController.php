@@ -9,7 +9,8 @@ class MatchController extends Controller
 {
     public function index(Request $request)
     {
-        return response()->json(Matches::whereOr('user1', 2)->whereOr('user2', 2)->get()->all());
+    	$userId = $request->user()->id;
+        return response()->json(Matches::whereOr('user1', $userId)->whereOr('user2', $userId)->get()->all());
     }
 
     public static function sendNotification($title, $message, $device_tokens) {
