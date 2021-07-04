@@ -94,7 +94,8 @@ Route::group([
 });
 
 Route::middleware('jwt.verify')->get('/test', function(Request $request) {
-	return $request->user();
+	$uid = $request->user()->id;
+	return \App\Models\Matches::where('user1', $uid)->orWhere('user2', $uid)->get()->first()->otherUser;
 });
 
 // ALL NEED JWT.VERIFY

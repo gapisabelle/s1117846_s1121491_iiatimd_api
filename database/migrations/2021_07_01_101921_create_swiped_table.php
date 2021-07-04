@@ -17,6 +17,8 @@ class CreateSwipedTable extends Migration
             $table->id();
             $table->integer('filmid');
             $table->integer('liked');
+            $table->string('image');
+            $table->string('title');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
