@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Swipe;
 use App\Models\Matches;
+use App\Models\User;
 
 class SwipeController extends Controller {
     /**
@@ -63,7 +64,8 @@ class SwipeController extends Controller {
         			$match->title = $validated["title"];
 		       		$match->chat_id = min([$request->user()->id, $otherUserSwipe->user_id]) . "|" . max([$request->user()->id, $otherUserSwipe->user_id]);
 		       		$match->save();
-		       		// TODO: Send notification to both users.
+
+		       		MatchController::sendNotification("Movinder", ['Movinder' => "You've got a Match!"], [$request->user()->fcmtoken, User::where('id', $otherUserSwipe->user_id)->firstOrFail()->fcmtoken]);
 		       	}
 	        }
         }
