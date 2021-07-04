@@ -26,6 +26,8 @@ class SwipeController extends Controller {
         $validator = \Validator::make($request->all(), [
             'filmId' => 'required|integer',
             'liked' => 'required|integer|between:-1,1',
+            'image' => 'required',
+            'title' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -57,6 +59,8 @@ class SwipeController extends Controller {
 		       		$match->filmid = $otherUserSwipe->filmid;
 		       		$match->user1 = $request->user()->id;
 		       		$match->user2 = $otherUserSwipe->user_id;
+		       		$match->image = $validated["image"];
+        			$match->title = $validated["title"];
 		       		$match->chat_id = min([$request->user()->id, $otherUserSwipe->user_id]) . "|" . max([$request->user()->id, $otherUserSwipe->user_id]);
 		       		$match->save();
 		       		// TODO: Send notification to both users.
@@ -69,6 +73,8 @@ class SwipeController extends Controller {
         $swiped = new Swipe();
         $swiped->filmid = $validated["filmId"];
         $swiped->liked = $validated["liked"];
+        $swiped->image = $validated["image"];
+        $swiped->title = $validated["title"];
         $swiped->user_id = $request->user()->id;
 
         return response()->json(["result" => $swiped->save()]);

@@ -19,6 +19,8 @@ class CreateMatchesTable extends Migration
             $table->foreignId('user1')->constrained('users')->onDelete('cascade');
             $table->foreignId('user2')->constrained('users')->onDelete('cascade');
             $table->string('chat_id');
+            $table->string('image');
+            $table->string('title');
             $table->timestamps();
         });
     }
