@@ -65,7 +65,7 @@ class MatchController extends Controller
         $match = Matches::where('chat_id', $validated["chatid"])->firstOrFail();
 
         $fcmTokens = [
-        	// $request->user()->fcmtoken,
+        	$request->user()->fcmtoken,
         	$match->otherUser->fcmtoken
         ];
 
