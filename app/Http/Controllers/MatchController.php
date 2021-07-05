@@ -10,7 +10,13 @@ class MatchController extends Controller
     public function index(Request $request)
     {
     	$userId = $request->user()->id;
-        return response()->json(Matches::where('user1', $userId)->whereOr('user2', $userId)->get()->all());
+
+    	$r1 = Matches::where('user1', $userId)->get()->all();
+    	$r2 = Matches::where('user2', $userId)->get()->all();
+
+    	return response()->json(array_merge($r1, $r2));
+
+        // return response()->json(Matches::where('user1', $userId)->whereOr('user2', $userId)->get()->all());
     }
 
     public static function sendNotification($title, $message, $device_tokens) {
