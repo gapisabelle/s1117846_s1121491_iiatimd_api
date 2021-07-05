@@ -53,4 +53,24 @@ class MatchController extends Controller
       
         return $response;
     }
+
+    public static function notifyChatMsg(Request $request) {
+    	$validator = \Validator::make($request->all(), [
+            'chatid' => 'required|string|min:3',
+            'msg' => 'required|string'
+        ]);
+
+        $validated = $validator->validated();
+
+        $match = Matches::where('chat_id', $validated["chatid"])->firstOrFail();
+
+        $fcmTokens = [
+        	$request->user()->fcmtoken,
+        	$match->otherUser->fcmtoken
+        ];
+
+        $msg = "(".$request->user()->name."): " . $validated["msg"];
+
+    	return response()->json(['result' => MatchController::sendNotification("Movinder", ['Movinder' => $msg, 'type' => 'msg', 'chatid' => $validated["chatid"]], $fcmTokens)]);
+    }
 }
