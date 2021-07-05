@@ -104,4 +104,5 @@ Route::group(['jwt.verify'], function ($router) {
 	Route::post('/swipe/store', [SwipeController::class, 'store']);
 	Route::get('/swipe', [SwipeController::class, 'index']);
 	Route::get('/matches', [MatchController::class, 'index']);
+	Route::post('/notifymsg', [MatchController::class, 'notifyChatMsg']);
 });

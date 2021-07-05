@@ -65,7 +65,7 @@ class SwipeController extends Controller {
 		       		$match->chat_id = min([$request->user()->id, $otherUserSwipe->user_id]) . "|" . max([$request->user()->id, $otherUserSwipe->user_id]);
 		       		$match->save();
 
-		       		MatchController::sendNotification("Movinder", ['Movinder' => "You've got a Match!"], [$request->user()->fcmtoken, User::where('id', $otherUserSwipe->user_id)->firstOrFail()->fcmtoken]);
+		       		MatchController::sendNotification("Movinder", ['Movinder' => "You've got a Match!", 'type' => 'match'], [$request->user()->fcmtoken, User::where('id', $otherUserSwipe->user_id)->firstOrFail()->fcmtoken]);
 		       	}
 	        }
         }
