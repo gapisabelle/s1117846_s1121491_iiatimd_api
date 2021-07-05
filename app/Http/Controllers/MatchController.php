@@ -54,7 +54,10 @@ class MatchController extends Controller
         return $response;
     }
 
-    public static function notifyChatMsg(Request $request) {
+    public function notifyChatMsg(Request $request) {
+    	if (!\Auth::check()) {
+    		return response()->json(['result' => false]);
+    	}
     	$validator = \Validator::make($request->all(), [
             'chatid' => 'required|string|min:3',
             'msg' => 'required|string'
