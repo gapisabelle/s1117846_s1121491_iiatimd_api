@@ -54,7 +54,8 @@ class MatchController extends Controller
         return $response;
     }
 
-    public function notifyChatMsg(Request $request) {
+    public function chatNotify(Request $request) {
+    	return $request->user();
     	if (!\Auth::check()) {
     		return response()->json(['result' => false]);
     	}
