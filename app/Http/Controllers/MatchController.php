@@ -54,11 +54,7 @@ class MatchController extends Controller
         return $response;
     }
 
-    public function chatNotify(Request $request) {
-    	return $request->user();
-    	if (!\Auth::check()) {
-    		return response()->json(['result' => false]);
-    	}
+    public static function notifyChatMsg(Request $request) {
     	$validator = \Validator::make($request->all(), [
             'chatid' => 'required|string|min:3',
             'msg' => 'required|string'
@@ -69,7 +65,7 @@ class MatchController extends Controller
         $match = Matches::where('chat_id', $validated["chatid"])->firstOrFail();
 
         $fcmTokens = [
-        	$request->user()->fcmtoken,
+        	// $request->user()->fcmtoken,
         	$match->otherUser->fcmtoken
         ];
 
